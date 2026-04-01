@@ -10,3 +10,4 @@ When we run:
 - it translates fastapi's response back into an http response
 
 uvicorn auth_service:app --port 8001 --reload
+uvicorn warehouse_service:app --port 8002 --reload

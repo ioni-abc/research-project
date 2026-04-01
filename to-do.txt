@@ -1,2 +1,3 @@
+- run load commands with one command
 - secrets or .env
 - logging instead of printing
