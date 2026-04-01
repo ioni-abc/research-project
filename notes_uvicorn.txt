@@ -1,0 +1,12 @@
+Why we need uvicorn:
+Uvicorn is an ASGI (asynchronous server gateaway interface) server. 
+
+When we run:
+'uvicorn auth_service:app'
+- it grabs the app object 
+- it opens up a netwrok port and keeps it opens
+- it listens for incoming http requests
+- it translates the web requests into pytohn objects that fastapi can understand
+- it translates fastapi's response back into an http response
+
+uvicorn auth_service:app --port 8001 --reload

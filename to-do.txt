@@ -1,0 +1,2 @@
+- secrets or .env
+- logging instead of printing
