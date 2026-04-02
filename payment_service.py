@@ -1,18 +1,22 @@
 from fastapi import FastAPI
 from dotenv import load_dotenv
-import asyncio
+from utils import setup_logging
+from fault_injections import long_response_time
+
 import os
 
-load_dotenv
 app = FastAPI(title="Payment Service")
+
+load_dotenv()
+logger = setup_logging("payment_service")
 
 @app.post("/pay")
 async def process_payment():
-    # Fault Injection PF20 - Latency
-    if os.getenv("INJECT_LATENCY"):
-        print("latency pf20 injected")
-        await asyncio.sleep(8)
+    logger.info("Post request for pay - Payment service")
+
+    # Trigger Fault Injection - Long Response Time PF20
+    if os.getenv("LONG_RESPONSE_TIME") == "true":
+        long_response_time()
     
-    print("successful process payment")
     return {"status": "paid"}
 
