@@ -1,13 +1,17 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from utils import setup_logging
+
+from utils import setup_logging, setup_observability
 
 app = FastAPI(title="Auth Service")
+setup_observability(app, "auth_service")
 logger = setup_logging("auth_service")
+
 
 class LoginRequest(BaseModel):
     username: str
     password: str
+
 
 @app.post("/login")
 async def login(req: LoginRequest):

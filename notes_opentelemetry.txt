@@ -1,0 +1,45 @@
+opentelemetry watches every http request, measures how long operations take, 
+and shares the results with prometheus and jaeger. it is the link between them.
+
+opentelemetry-api
+- Role: The Contract
+- Function: no operational logic. It provides the abstract classes, types, 
+and interfaces.
+
+opentelemetry-sdk
+- Role: The Implementation
+- Function: the actual logic that executes the API's contract. It maintains the state 
+of active spans, handles sampling decisions, processes context propagation, 
+and batches span data in memory.
+
+opentelemetry-instrumentation-fastapi
+- Role: ASGI Middleware
+- Function: It intercepts the incoming ASGI request/response cycle in FastAPI. 
+It automatically extracts any incoming Trace IDs from the HTTP headers, 
+creates a new Span representing the execution of your endpoint, records HTTP 
+metadata (status codes, routes, methods), and closes the Span when the response 
+is returned.
+
+opentelemetry-instrumentation-httpx:
+- Role: Library Patcher.
+- Function: It monkey-patches the httpx client. When your Order Service makes 
+an outbound HTTP request to the Database Service, this library automatically 
+creates a Span for the network call and—crucially—injects the current W3C 
+Trace Context into the outbound HTTP headers. This allows the receiving 
+service to continue the same trace.
+
+opentelemetry-exporter-otlp:
+- Role: Data Serialization and Transport.
+- Function: It takes the batched, in-memory Span objects managed by the SDK, 
+serializes them into the standard OTLP (OpenTelemetry Protocol) Protocol Buffers 
+(protobuf) format, and transmits them over the network via gRPC to your designated
+collector (Jaeger on port 4317).
+
+prometheus-fastapi-instrumentator:
+- Role: Metrics Middleware and Endpoint.
+- Function: While OTel handles traces, this package specifically handles 
+Prometheus metrics. It acts as FastAPI middleware to increment Prometheus 
+registries (Counters, Histograms) for every HTTP request. Additionally, it mounts 
+the /metrics endpoint on your FastAPI application, formatting the registry 
+data into the plain-text Prometheus Exposition Format so the Prometheus 
+server can scrape it.
