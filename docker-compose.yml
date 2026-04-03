@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  auth_service:
+    build: .
+    command: uvicorn auth_service:app --host 0.0.0.0 --port 8001
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+
+  database_service:
+    build: .
+    command: uvicorn database_service:app --host 0.0.0.0 --port 8002
+    ports:
+      - "8002:8002"
+    env_file:
+      - .env
+
+  payment_service:
+    build: .
+    command: uvicorn payment_service:app --host 0.0.0.0 --port 8003
+    ports:
+      - "8003:8003"
+    env_file:
+      - .env
+
+  order_service:
+    build: .
+    command: uvicorn order_service:app --host 0.0.0.0 --port 8004
+    ports:
+      - "8004:8004"
+    env_file:
+      - .env
+    environment:
+      - DB_URL=http://database_service:8002/reserve
+      - PAYMENT_URL=http://payment_service:8003/pay
+    depends_on:
+      - auth_service
+      - database_service
+      - payment_service

@@ -24,6 +24,7 @@ def run():
 
             # Placing order simulation
             order_response = client.post(ORDER_URL, json={"item": "laptop"}, headers=headers)
+            logger.info(order_response.json())
             end_time = time.time()
             
             logger.info(f"Total Time: {end_time - start_time:.2f} seconds")

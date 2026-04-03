@@ -16,7 +16,7 @@ async def process_payment():
 
     # Trigger Fault Injection - Long Response Time PF20
     if os.getenv("LONG_RESPONSE_TIME") == "true":
-        long_response_time()
+        await long_response_time()
     
     return {"status": "paid"}
 

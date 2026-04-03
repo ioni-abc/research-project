@@ -14,6 +14,6 @@ async def login(req: LoginRequest):
     # Dummy login process
     logger.info("- Log in")
     if req.username == "admin" and req.password == "admin":
-        logger.info("- Log in sucessfull")
+        logger.info("Log in sucessfull")
         return {"token": "valid_token_12345"}
     raise HTTPException(status_code=401, detail="Unauthorized")

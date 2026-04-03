@@ -19,7 +19,7 @@ async def reserve_item(item: str):
     logger.info("Post request for reserve - Database service")
 
     # Trigger Fault Injection - Service Unavailable RF12
-    if os.getenv("INJECT_SERVICE_UNAVAILABE") == "true":
+    if os.getenv("INJECT_SERVICE_UNAVAILABLE") == "true":
         service_unavailable()
 
     if item in inventory and inventory[item] > 0:
