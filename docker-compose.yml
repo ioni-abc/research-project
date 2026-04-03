@@ -39,3 +39,23 @@ services:
       - auth_service
       - database_service
       - payment_service
+  
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus.yml
+    depends_on:
+      - order_service
+      - database_service
+      - payment_service
+      - auth_service
+  
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686"
+      - "4317:4317"

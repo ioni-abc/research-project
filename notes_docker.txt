@@ -1,0 +1,23 @@
+image: prom/prometheus:latest
+- `image` is one of two ways to create a container, the other being `build` (when you write your own code)
+- prom/prometheus: prom is the official open-source publisher
+
+ports:
+    - "9090:9090"
+- LAPTOP_PORT : CONTAINER_PORT
+
+volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+- `volumes`: a live portal between the laptop's hard drive and the inside of the docker container
+- it matches the local configuration of `./prometheus.yml` to the internal file path inside
+the prometheus vm `etc/prometheus/prometheus.yml`
+
+depends_on:
+- prometheus is configured to depend on the 4 other services in order to reach out
+and scrape metrics from them. this also ensures that it will wait for them to boot up
+first.
+
+environment:
+    - COLLECTOR_OTLP_ENABLED=true
+- `environment`: is used to set environmental variables inside the container
+- `COLLECTOR_OTLP_ENABLED=true`
